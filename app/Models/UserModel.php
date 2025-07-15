@@ -8,10 +8,25 @@ class UserModel extends Model
 {
     protected $table         = 'users';
     protected $primaryKey    = 'id';
-    protected $allowedFields = ['name', 'username', 'email', 'password', 'status', 'role', 'created_at', 'updated_at'];
+    protected $allowedFields = ['name', 'username', 'email', 'password', 'status', 'role'];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
+
+    protected $validationRules = [
+        'name'      => 'required|min_length[3]|max_length[100]',
+        'username'  => 'required|min_length[3]|max_length[100]|is_unique[users.username]',
+        'email'     => 'required|valid_email|is_unique[users.email]',
+        'password'  => 'required|min_length[6]'
+    ];
+
+    protected function hashPassword($data)
+    {
+        if (isset($data['data']['password'])) {
+            $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
+        }
+        return $data;
+    }
 
     public function getUserByEmail(string $email)
     {

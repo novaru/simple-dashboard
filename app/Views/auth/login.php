@@ -1,5 +1,6 @@
-<body class="app sidebar-mini ltr login-img">
+<?php helper(['form', 'url']); ?>
 
+<body class="app sidebar-mini ltr login-img">
     <!-- BACKGROUND-IMAGE -->
     <div class="">
 
@@ -16,16 +17,43 @@
                 <!-- CONTAINER OPEN -->
                 <div class="col col-login mx-auto mt-7">
                     <div class="text-center">
-                        <a href="index.html"><img src="<?= base_url('/'); ?>assets/images/brand/logo-white.png" class="header-brand-img" alt=""></a>
+                        <a href="<?= base_url(); ?>">
+                            <img src="<?= base_url('/'); ?>assets/images/brand/logo-white.png" class="header-brand-img" alt="">
+                        </a>
                     </div>
                 </div>
 
                 <div class="container-login100">
                     <div class="wrap-login100 p-6">
-                        <form class="login100-form validate-form">
+
+                        <!-- Display Error/Success Messages -->
+                        <?php if (session()->getFlashdata('error')): ?>
+                            <div class="alert alert-danger mb-3">
+                                <?= session()->getFlashdata('error') ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (session()->getFlashdata('success')): ?>
+                            <div class="alert alert-success mb-3">
+                                <?= session()->getFlashdata('success') ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (session()->getFlashdata('errors')): ?>
+                            <div class="alert alert-danger mb-3">
+                                <ul class="mb-0">
+                                    <?= session()->getFlashdata('errors') ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
+
+                        <form class="login100-form validate-form" method="post" action="<?= base_url('auth/login'); ?>">
+                            <?= csrf_field() ?>
+
                             <span class="login100-form-title pb-5">
                                 Login
                             </span>
+
                             <div class="panel panel-primary">
                                 <div class="tab-menu-heading">
                                     <div class="tabs-menu1">
@@ -43,24 +71,33 @@
                                                 <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
                                                     <i class="zmdi zmdi-email text-muted" aria-hidden="true"></i>
                                                 </a>
-                                                <input class="input100 border-start-0 form-control ms-0" type="email" placeholder="Email">
+                                                <input class="input100 border-start-0 form-control ms-0"
+                                                    type="email"
+                                                    name="email"
+                                                    placeholder="Email"
+                                                    value="<?= old('email') ?>"
+                                                    required>
                                             </div>
                                             <div class="wrap-input100 validate-input input-group" id="Password-toggle">
                                                 <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
                                                     <i class="zmdi zmdi-eye text-muted" aria-hidden="true"></i>
                                                 </a>
-                                                <input class="input100 border-start-0 form-control ms-0" type="password" placeholder="Password">
+                                                <input class="input100 border-start-0 form-control ms-0"
+                                                    type="password"
+                                                    name="password"
+                                                    placeholder="Password"
+                                                    required>
                                             </div>
                                             <div class="text-end pt-4">
                                                 <p class="mb-0"><a href="forgot-password.html" class="text-primary ms-1">Forgot Password?</a></p>
                                             </div>
                                             <div class="container-login100-form-btn">
-                                                <a href="index.html" class="login100-form-btn btn-primary">
+                                                <button type="submit" class="login100-form-btn btn-primary">
                                                     Login
-                                                </a>
+                                                </button>
                                             </div>
                                             <div class="text-center pt-3">
-                                                <p class="text-dark mb-0">Not a member?<a href="register.html" class="text-primary ms-1">Sign UP</a></p>
+                                                <p class="text-dark mb-0">Not a member?<a href="<?= base_url('/') ?>auth/register" class="text-primary ms-1">Sign UP</a></p>
                                             </div>
                                             <label class="login-social-icon"><span>Login with Social</span></label>
                                             <div class="d-flex justify-content-center">
@@ -84,27 +121,28 @@
                                         <div class="tab-pane" id="tab6">
                                             <div id="mobile-num" class="wrap-input100 validate-input input-group mb-4">
                                                 <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
-                                                    <span>+91</span>
+                                                    <span>+62</span>
                                                 </a>
-                                                <input class="input100 border-start-0 form-control ms-0">
+                                                <input class="input100 border-start-0 form-control ms-0"
+                                                    name="mobile"
+                                                    placeholder="Mobile Number">
                                             </div>
                                             <div id="login-otp" class="justify-content-around mb-5">
-                                                <input class="form-control text-center w-15" id="txt1" maxlength="1">
-                                                <input class="form-control text-center w-15" id="txt2" maxlength="1">
-                                                <input class="form-control text-center w-15" id="txt3" maxlength="1">
-                                                <input class="form-control text-center w-15" id="txt4" maxlength="1">
+                                                <input class="form-control text-center w-15" id="txt1" name="otp1" maxlength="1">
+                                                <input class="form-control text-center w-15" id="txt2" name="otp2" maxlength="1">
+                                                <input class="form-control text-center w-15" id="txt3" name="otp3" maxlength="1">
+                                                <input class="form-control text-center w-15" id="txt4" name="otp4" maxlength="1">
                                             </div>
-                                            <span>Note : Login with registered mobile number to generate OTPspan>
-                                                <div class="container-login100-form-btn ">
-                                                    <a href="javascript:void(0)" class="login100-form-btn btn-primary" id="generate-otp">
-                                                        Proceed
-                                                    </a>
-                                                </div>
+                                            <span>Note : Login with registered mobile number to generate OTP</span>
+                                            <div class="container-login100-form-btn ">
+                                                <button type="button" class="login100-form-btn btn-primary" id="generate-otp">
+                                                    Proceed
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </form>
                     </div>
                 </div>
@@ -112,33 +150,5 @@
             </div>
         </div>
         <!-- End PAGE -->
-
     </div>
     <!-- BACKGROUND-IMAGE CLOSED -->
-
-    <!-- JQUERY JS -->
-    <script src="<?= base_url('/'); ?>assets/js/jquery.min.js"></script>
-
-    <!-- BOOTSTRAP JS -->
-    <script src="<?= base_url('/'); ?>assets/plugins/bootstrap/js/popper.min.js"></script>
-    <script src="<?= base_url('/'); ?>assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- SHOW PASSWORD JS -->
-    <script src="<?= base_url('/'); ?>assets/js/show-password.min.js"></script>
-
-    <!-- GENERATE OTP JS -->
-    <script src="<?= base_url('/'); ?>assets/js/generate-otp.js"></script>
-
-    <!-- Perfect SCROLLBAR JS-->
-    <script src="<?= base_url('/'); ?>assets/plugins/p-scroll/perfect-scrollbar.js"></script>
-
-    <!-- Color Theme js -->
-    <script src="<?= base_url('/'); ?>assets/js/themeColors.js"></script>
-
-    <!-- CUSTOM JS -->
-    <script src="<?= base_url('/'); ?>assets/js/custom.js"></script>
-
-
-</body>
-
-</html>
