@@ -367,8 +367,9 @@
                         <h1 class="page-title">Admin Dashboard</h1>
                         <div>
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Admin Dashboard</li>
+                                <li class="breadcrumb-item"><a href="<?= base_url(); ?>">Home</a></li>
+                                <li class="breadcrumb-item"><a href="<?= base_url('/admin/dashboard'); ?>">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit User</li>
                             </ol>
                         </div>
                     </div>
@@ -380,193 +381,85 @@
                         <div class="col-12 col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title mb-0">Users</h3>
+                                    <h4 class="card-title">Edit User</h4>
                                 </div>
-                                <div class="card-body pt-4">
-                                    <div class="grid-margin">
-                                        <div class="">
-                                            <div class="panel panel-primary">
-                                                <div class="tab-menu-heading border-0 p-0">
-                                                    <div class="tabs-menu1">
-                                                        <!-- Tabs -->
-                                                        <ul class="nav panel-tabs product-sale">
-                                                            <li><a href="#tab5" class="active"
-                                                                    data-bs-toggle="tab">All products</a></li>
-                                                            <li><a href="#tab6" data-bs-toggle="tab"
-                                                                    class="text-dark">Shipped</a></li>
-                                                            <li><a href="#tab7" data-bs-toggle="tab"
-                                                                    class="text-dark">Pending</a></li>
-                                                            <li><a href="#tab8" data-bs-toggle="tab"
-                                                                    class="text-dark">Cancelled</a></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Display Error/Success Messages -->
-                                                <?php if (session()->getFlashdata('error')): ?>
-                                                    <div class="alert alert-danger mb-3">
-                                                        <?= session()->getFlashdata('error') ?>
-                                                    </div>
-                                                <?php endif; ?>
-
-                                                <?php if (session()->getFlashdata('success')): ?>
-                                                    <div class="alert alert-success mb-3">
-                                                        <?= session()->getFlashdata('success') ?>
-                                                    </div>
-                                                <?php endif; ?>
-
-                                                <div class="panel-body tabs-menu-body border-0 pt-0">
-                                                    <div class="tab-content">
-                                                        <div class="tab-pane active" id="tab5">
-                                                            <div class="table-responsive">
-                                                                <table id="data-table"
-                                                                    class="table table-bordered text-nowrap mb-0">
-                                                                    <thead class="border-top">
-                                                                        <tr class="text-center">
-                                                                            <th class="bg-transparent border-bottom-0"
-                                                                                style="width: 5%;">Name</th>
-                                                                            <th class="bg-transparent border-bottom-0">
-                                                                                Username</th>
-                                                                            <th class="bg-transparent border-bottom-0">
-                                                                                Email</th>
-                                                                            <th class="bg-transparent border-bottom-0">
-                                                                                Role</th>
-                                                                            <th class="bg-transparent border-bottom-0"
-                                                                                style="width: 10%;">Status</th>
-                                                                            <th class="bg-transparent border-bottom-0"
-                                                                                style="width: 5%;">Action</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php foreach ($users as $user): ?>
-                                                                            <tr class="border-bottom">
-                                                                                <td class="align-middle">
-                                                                                    <div class="mt-sm-1 d-block">
-                                                                                        <h6 class="mb-0 fs-14 fw-semibold">
-                                                                                            <?= esc($user['name']); ?>
-                                                                                        </h6>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <div class="text-center">
-                                                                                        <div class="mt-sm-1 d-block">
-                                                                                            <h6 class="mb-0 fs-14 fw-semibold">
-                                                                                                <?= esc($user['username']); ?>
-                                                                                            </h6>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <div class="d-flex">
-                                                                                        <div class="mt-sm-1 d-block">
-                                                                                            <h6 class="mb-0 fs-14 fw-semibold">
-                                                                                                <?= esc($user['email']); ?>
-                                                                                            </h6>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <div class="text-center">
-                                                                                        <div class="mt-sm-1 d-block">
-                                                                                            <h6 class="mb-0 fs-14 fw-semibold">
-                                                                                                <?= esc($user['role']); ?>
-                                                                                            </h6>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td class="align-middle">
-                                                                                    <div class="text-center">
-                                                                                        <div class="mt-sm-1 d-block">
-                                                                                            <span class="badge rounded-pill p-2 px-3 
-                                                                                    <?= ($user['status'] === 'active') ?
-                                                                                        'bg-success-transparent text-success' :
-                                                                                        'bg-danger-transparent text-danger'
-                                                                                    ?>"><?= esc($user['status']); ?></span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="g-2">
-                                                                                        <a href="<?= base_url('/admin/update/' . $user['username']) ?>"
-                                                                                            class="btn text-primary btn-sm"
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            data-bs-original-title="Edit">
-                                                                                            <span class="fe fe-edit fs-14"></span>
-                                                                                        </a>
-                                                                                        <button class="btn text-danger btn-sm"
-                                                                                            data-bs-toggle="modal"
-                                                                                            data-bs-target="#smallmodal">
-                                                                                            <span class="fe fe-trash-2 fs-14"></span>
-                                                                                        </button>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-
-                                                                            <!-- Modal for Delete Confirmation -->
-                                                                            <div class="modal fade" id="smallmodal" tabindex="-1" role="dialog">
-                                                                                <div class="modal-dialog modal-sm" role="document">
-                                                                                    <div class="modal-content">
-                                                                                        <div class="modal-header">
-                                                                                            <h5 class="modal-title">Delete user</h5>
-                                                                                            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">×</span>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <div class="modal-body">
-                                                                                            <p>Are you sure to delete this user?</p>
-                                                                                        </div>
-                                                                                        <div class="modal-footer">
-                                                                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                                                            <form action="<?= base_url('/admin/delete/' . $user['username']) ?>" method="post" class="d-inline">
-                                                                                                <?= csrf_field() ?>
-                                                                                                <input type="hidden" name="username" value="<?= esc($user['username']); ?>">
-                                                                                                <button class="btn btn-danger" type="submit">Delete</button>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                        <?php endforeach; ?>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                <div class="card-body">
+                                    <form class="validate-form" method="post" action="<?= base_url('admin/update/' . $targetUser['username']); ?>">
+                                        <?= csrf_field() ?>
+                                        <div class="form-group">
+                                            <label class="form-label">Name</label>
+                                            <input class="form-control"
+                                                type="text"
+                                                name="name"
+                                                placeholder="Name"
+                                                value="<?= old('name') ?? esc($targetUser['name']); ?>"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Username</label>
+                                            <input class="form-control"
+                                                type="text"
+                                                name="username"
+                                                placeholder="Username"
+                                                value="<?= old('username') ?? esc($targetUser['username']); ?>"
+                                                required>
+                                        </div>
+                                        <div class="wrap-input100 validate-input input-group" data-bs-validate="Valid email is required: ex@abc.xyz">
+                                            <label class="form-label">Email</label>
+                                            <div class="input-group">
+                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                    <i class="zmdi zmdi-email text-muted" aria-hidden="true"></i>
+                                                </a>
+                                                <input class="input100 border-start-0 form-control ms-0"
+                                                    type="email"
+                                                    name="email"
+                                                    placeholder="Email"
+                                                    value="<?= old('email') ?? esc($targetUser['email']); ?>"
+                                                    required>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="wrap-input100 validate-input input-group" id="Password-toggle">
+                                            <label class="form-label">Password</label>
+                                            <div class="input-group">
+                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true"></i>
+                                                </a>
+                                                <input class="input100 border-start-0 form-control ms-0"
+                                                    type="password"
+                                                    name="password"
+                                                    placeholder="Password"
+                                                    value=""
+                                                    required>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-primary mt-4 mb-0">Submit</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                        <!-- ROW-4 END -->
                     </div>
-                    <!-- ROW-4 END -->
+                    <!-- CONTAINER END -->
                 </div>
-                <!-- CONTAINER END -->
             </div>
-        </div>
-        <!--app-content close-->
+            <!--app-content close-->
 
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row align-items-center flex-row-reverse">
+                    <div class="col-md-12 col-sm-12 text-center">
+                        Copyright © <span id="year"></span> <a href="javascript:void(0)">Sash</a>. Designed with <span
+                            class="fa fa-heart text-danger"></span> by <a href="javascript:void(0)"> Spruko </a> All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- FOOTER END -->
     </div>
 
-
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row align-items-center flex-row-reverse">
-                <div class="col-md-12 col-sm-12 text-center">
-                    Copyright © <span id="year"></span> <a href="javascript:void(0)">Sash</a>. Designed with <span
-                        class="fa fa-heart text-danger"></span> by <a href="javascript:void(0)"> Spruko </a> All rights reserved.
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- FOOTER END -->
-
-</div>
-
-<!-- BACK-TO-TOP -->
-<a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
-<?= $this->endSection('content'); ?>
+    <!-- BACK-TO-TOP -->
+    <a href="#top" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+    <?= $this->endSection('content'); ?>

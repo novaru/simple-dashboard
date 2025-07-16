@@ -28,6 +28,11 @@ class UserModel extends Model
         return $data;
     }
 
+    public function getAllUsers()
+    {
+        return $this->findAll();
+    }
+
     public function getUserByEmail(string $email)
     {
         return $this->where('email', $email)->first();
@@ -38,13 +43,13 @@ class UserModel extends Model
         return $this->insert($data);
     }
 
-    public function updateUser(int $id)
+    public function updateUser(string $username, array $data): bool
     {
-        $this->update($id);
+        return $this->where('username', $username)->set($data)->update();
     }
 
-    public function deleteUser(int $id)
+    public function deleteUser(string $username): bool
     {
-        $this->delete($id);
+        return $this->where('username', $username)->delete();
     }
 }
