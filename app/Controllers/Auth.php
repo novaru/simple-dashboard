@@ -145,7 +145,7 @@ class Auth extends BaseController
             'status'    => $this->request->getPost('status') ?? 'active',
         ];
 
-        if ($this->userModel->createUser($data)) {
+        if ($this->userModel->save($data)) {
             $session->setFlashdata('success', 'Registration successful. Please login.');
             return redirect()->to('/auth/login');
         } else {

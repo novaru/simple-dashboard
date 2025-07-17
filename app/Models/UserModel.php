@@ -14,9 +14,10 @@ class UserModel extends Model
     protected $updatedField  = 'updated_at';
 
     protected $validationRules = [
+        'id'       => 'permit_empty|is_natural_no_zero',
         'name'      => 'required|min_length[3]|max_length[100]',
-        'username'  => 'required|min_length[3]|max_length[100]|is_unique[users.username]',
-        'email'     => 'required|valid_email|is_unique[users.email]',
+        'username'  => 'required|min_length[3]|max_length[100]|is_unique[users.username,id,{id}]',
+        'email'     => 'required|valid_email|is_unique[users.email,id,{id}]',
         'password'  => 'required|min_length[6]'
     ];
 
@@ -38,18 +39,8 @@ class UserModel extends Model
         return $this->where('email', $email)->first();
     }
 
-    public function createUser(array $data): bool
+    public function deleteUser(int $id)
     {
-        return $this->insert($data);
-    }
-
-    public function updateUser(string $username, array $data): bool
-    {
-        return $this->where('username', $username)->set($data)->update();
-    }
-
-    public function deleteUser(string $username): bool
-    {
-        return $this->where('username', $username)->delete();
+        $this->delete($id);
     }
 }
