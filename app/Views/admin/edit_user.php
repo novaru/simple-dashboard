@@ -384,8 +384,33 @@
                                     <h4 class="card-title">Edit User</h4>
                                 </div>
                                 <div class="card-body">
+
+                                    <!-- Display Error/Success Messages -->
+                                    <?php if (session()->getFlashdata('error')): ?>
+                                        <div class="alert alert-danger mb-3">
+                                            <?= session()->getFlashdata('error') ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if (session()->getFlashdata('success')): ?>
+                                        <div class="alert alert-success mb-3">
+                                            <?= session()->getFlashdata('success') ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if (session()->getFlashdata('errors')): ?>
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                                                    <li><?= $error ?></li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <form class="validate-form" method="post" action="<?= base_url('admin/update/' . $targetUser['username']); ?>">
                                         <?= csrf_field() ?>
+                                        <input type="hidden" name="id" value="<?= $targetUser['id']; ?>">
                                         <div class="form-group">
                                             <label class="form-label">Name</label>
                                             <input class="form-control"
@@ -404,10 +429,10 @@
                                                 value="<?= old('username') ?? esc($targetUser['username']); ?>"
                                                 required>
                                         </div>
-                                        <div class="wrap-input100 validate-input input-group" data-bs-validate="Valid email is required: ex@abc.xyz">
+                                        <div class="validate-input input-group" data-bs-validate="Valid email is required: ex@abc.xyz">
                                             <label class="form-label">Email</label>
                                             <div class="input-group">
-                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                <a class="input-group-text bg-white text-muted">
                                                     <i class="zmdi zmdi-email text-muted" aria-hidden="true"></i>
                                                 </a>
                                                 <input class="input100 border-start-0 form-control ms-0"
@@ -418,19 +443,31 @@
                                                     required>
                                             </div>
                                         </div>
-                                        <div class="wrap-input100 validate-input input-group" id="Password-toggle">
-                                            <label class="form-label">Password</label>
-                                            <div class="input-group">
-                                                <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
-                                                    <i class="zmdi zmdi-eye text-muted" aria-hidden="true"></i>
-                                                </a>
-                                                <input class="input100 border-start-0 form-control ms-0"
-                                                    type="password"
-                                                    name="password"
-                                                    placeholder="Password"
-                                                    value=""
-                                                    required>
-                                            </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Role</label>
+                                            <?php $isAdmin = $targetUser['role'] === 'admin'; ?>
+                                            <input type="hidden" name="role" value="member">
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox"
+                                                    class="custom-control-input"
+                                                    name="role"
+                                                    value="admin"
+                                                    <?= $isAdmin ? 'checked' : ''; ?>>
+                                                <span class="custom-control-label">Administrator</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Status</label>
+                                            <?php $isActive = $targetUser['status'] === 'active'; ?>
+                                            <input type="hidden" name="status" value="inactive">
+                                            <label class="custom-control custom-checkbox">
+                                                <input type="checkbox"
+                                                    class="custom-control-input"
+                                                    name="status"
+                                                    value="active"
+                                                    <?= $isActive ? 'checked' : ''; ?>>
+                                                <span class="custom-control-label">Active</span>
+                                            </label>
                                         </div>
                                         <button class="btn btn-primary mt-4 mb-0">Submit</button>
                                     </form>

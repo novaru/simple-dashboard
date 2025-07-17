@@ -26,15 +26,6 @@ class Admin extends BaseController
             'users' => $this->userModel->getAllUsers(),
         ];
 
-        // Check if current user is an admin
-        if ($session->get('role') !== 'admin') {
-            $data['title'] = 'Access Denied | MyWeb';
-            echo view('layouts/header', $data);
-            echo view('errors/403',     $data);
-            echo view('layouts/footer', $data);
-            return;
-        }
-
         echo view('admin/dashboard', $data);
     }
 
@@ -51,26 +42,36 @@ class Admin extends BaseController
             'targetUser' => $this->userModel->where('username', $username)->first(),
         ];
 
-        // Check if current user is an admin
-        if ($session->get('role') !== 'admin') {
-            $data['title'] = 'Access Denied | MyWeb';
-            echo view('layouts/header', $data);
-            echo view('errors/403',     $data);
-            echo view('layouts/footer', $data);
-            return;
-        }
-
         echo view('admin/edit_user', $data);
+    }
+
+    public function updateUser()
+    {
+        $userId = $this->request->getVar('id');
+
+        $updateData = [
+            'id'       => $userId,
+            'name'     => $this->request->getVar('name'),
+            'username' => $this->request->getVar('username'),
+            'email'    => $this->request->getVar('email'),
+            'role'     => $this->request->getVar('role'),
+            'status'   => $this->request->getVar('status'),
+        ];
+
+        if ($this->userModel->update($userId, $updateData)) {
+            return redirect()->to('/admin/dashboard')->with('success', 'User updated successfully');
+        } else {
+            $errors = $this->userModel->errors();
+            $errorMessage = implode(', ', $errors);
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Failed to update user: ' . $errorMessage);
+        }
     }
 
     public function delete(string $username)
     {
-        $session = session();
-
-        if ($session->get('role') !== 'admin') {
-            return redirect()->to('/admin/dashboard');
-        }
-
         if ($this->userModel->deleteUser($username)) {
             return redirect()->to('/admin/dashboard')->with('success', 'User deleted successfully');
         } else {
